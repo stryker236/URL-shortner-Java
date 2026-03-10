@@ -1,5 +1,8 @@
 # URL Shortener – TODO
 
+# Extras 
+[] Improve the database conection management
+
 ## Phase 1 – Database
 - [x] PostgreSQL container running
 - [x] Database connection working

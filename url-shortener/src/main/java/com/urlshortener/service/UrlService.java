@@ -5,22 +5,21 @@ import com.urlshortener.repository.UrlRepository;
 
 public class UrlService {
 
-    private UrlRepository repository = new UrlRepository();
+    private UrlRepository urlRepository = new UrlRepository();
 
     public String createShortUrl(String originalUrl) throws Exception {
 
+        if (urlRepository.existsByOriginalUrl(originalUrl)) return null;
+
         String code = ShortCodeGenerator.generate();
-
         Url url = new Url(code, originalUrl);
-
-        repository.save(url);
-
+        urlRepository.save(url);
         return code;
     }
 
     public String getOriginalUrl(String code) throws Exception {
 
-        Url url = repository.findByShortCode(code);
+        Url url = urlRepository.findByShortCode(code);
 
         if (url == null) {
             return null;
