@@ -12,7 +12,7 @@ public class UrlController {
         UrlService service = new UrlService();
         Gson gson = new Gson();
 
-        // Create short URL
+        // Create short URL through params
         post("/urls", (req, res) -> {
 
             String originalUrl = req.queryParams("url");
@@ -26,9 +26,8 @@ public class UrlController {
             return "http://localhost:4567/r/" + code;
         });
 
-        // Get URL info
+        // Get original URL info
         get("/urls/:code", (req, res) -> {
-
             String code = req.params(":code");
             String original = service.getOriginalUrl(code);
 
@@ -38,12 +37,11 @@ public class UrlController {
             }
 
             res.type("application/json");
-            return "http://localhost:4567/r/" + code;
+            return original;
         });
 
-        // Redirect
-        get("/r/:code", (req, res) -> {
-
+        // Redirect to original URL
+        get("/urls/:code/redirect", (req, res) -> {
             String code = req.params(":code");
             String original = service.getOriginalUrl(code);
 
@@ -55,5 +53,7 @@ public class UrlController {
             res.redirect(original);
             return null;
         });
+
+
     }
 }

@@ -1,37 +1,48 @@
 # URL Shortener – TODO
 
 # Extras 
-[] Improve the database conection management
+- [ ] Improve the database conection management
+- [ ] Improve the verification of orignal url existance in the database
+- [ ] Understand better indexing
+- [ ] Test all the layers
+    - [ ] Load testing with JMeter or similar
+    - [ ] Understand Mocking and stubbing
+    - [ ] Repository
+        - [ ] Test with JUnit and H2 in-memory database
+    - [ ] Service
+        - [ ] Test with JUnit and Mockito
+    - [ ] API
+        - [ ] Test with RestAssured or similar
 
 ## Phase 1 – Database
 - [x] PostgreSQL container running
 - [x] Database connection working
 - [x] Create urls table
-- [ ] Verify insert query
-- [ ] Verify lookup query
-- [ ] Test index on short_code
-- [ ] Run EXPLAIN ANALYZE on lookup query
-- [ ] Insert large dataset (100k+ rows) and test lookup speed
+- [x] Verify insert query
+- [x] Insert large dataset (100k+ rows) and test lookup speed
+- [x] Verify lookup query
+- [x] Test index on short_code
+- [x] Run EXPLAIN ANALYZE on lookup query
 
 ## Phase 2 – Core Domain
-- [ ] Create Url entity
-- [ ] Create ShortCodeGenerator
+- [x] Create Url entity
+- [x] Create ShortCodeGenerator
 - [ ] Generate large sample of codes (1M)
 - [ ] Check collision rate
 - [ ] Compare random vs sequential Base62 generation
 
 ## Phase 3 – Repository Layer
-- [ ] Implement UrlRepository
-- [ ] Implement save(shortCode, originalUrl)
-- [ ] Implement findByShortCode(shortCode)
-- [ ] Test repository with manual inserts
-- [ ] Insert large dataset (100k–1M rows)
-- [ ] Measure lookup latency
+- [x] Implement UrlRepository
+- [x] Implement save(shortCode, originalUrl)
+- [x] Implement findByShortCode(shortCode)
+- [x] Test repository with manual inserts
+- [x] Insert large dataset (100k–1M rows)
+- [x] Measure lookup latency
 
 ## Phase 4 – Service Layer
-- [ ] Implement UrlService
-- [ ] createShortUrl(originalUrl)
-- [ ] getOriginalUrl(shortCode)
+- [x] Implement UrlService
+- [x] createShortUrl(originalUrl)
+- [x] getOriginalUrl(shortCode)
 - [ ] Handle duplicate short codes with retry
 - [ ] Validate URL format
 - [ ] Write basic unit tests for service logic
