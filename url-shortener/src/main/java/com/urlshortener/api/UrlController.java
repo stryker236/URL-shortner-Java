@@ -5,6 +5,8 @@ import com.urlshortener.service.UrlService;
 
 import static spark.Spark.*;
 
+import java.net.URI;
+
 public class UrlController {
 
     public static void register() {
@@ -15,7 +17,21 @@ public class UrlController {
         // Create short URL through params
         post("/urls", (req, res) -> {
 
-            String originalUrl = req.queryParams("url");
+            String originalUrl = req.queryParams("url").toLowerCase();
+            if (!originalUrl.startsWith("http")) {
+                originalUrl = "http://" + originalUrl;
+            }
+            URI uri = URI.create(originalUrl);
+            System.out.println("Original URL: " + originalUrl);
+
+            originalUrl = uri.getHost();
+            if (uri.getRawPath() != null && !uri.getRawPath().isEmpty()) {
+                originalUrl += uri.getRawPath();
+            }
+            if (uri.getRawQuery() != null && !uri.getRawQuery().isEmpty()) {
+                originalUrl += "?" + uri.getRawQuery();
+            }
+            System.out.println("Original after processing: " + originalUrl);
             String code = service.createShortUrl(originalUrl);
             if (code == null) {
                 res.status(400);
@@ -53,7 +69,6 @@ public class UrlController {
             res.redirect(original);
             return null;
         });
-
 
     }
 }

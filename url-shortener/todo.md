@@ -1,7 +1,7 @@
 # URL Shortener – TODO
 
 # Extras 
-- [ ] Improve the database conection management
+- [x] Improve the database conection management
 - [ ] Improve the verification of orignal url existance in the database
 - [ ] Understand better indexing
 - [ ] Test all the layers
