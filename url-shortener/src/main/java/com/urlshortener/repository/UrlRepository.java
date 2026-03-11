@@ -9,8 +9,10 @@ import java.sql.ResultSet;
 
 public class UrlRepository {
 
+    private static final String DATABASE = "urlshortener";
+
     public void save(Url url) throws Exception {
-        Connection conn = DatabaseConfig.getConnection();
+        Connection conn = DatabaseConfig.getConnection(DATABASE);
 
         String sql = "INSERT INTO urls (short_code, original_url) VALUES (?, ?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -22,7 +24,7 @@ public class UrlRepository {
     }
 
     public Url findByShortCode(String shortCode) throws Exception {
-        Connection conn = DatabaseConfig.getConnection();
+        Connection conn = DatabaseConfig.getConnection(DATABASE);
         
         String sql = "SELECT original_url FROM urls WHERE short_code = ?";
         
@@ -41,7 +43,7 @@ public class UrlRepository {
     }
 
     public Url findByOriginalUrl(String originalUrl) throws Exception {
-        Connection conn = DatabaseConfig.getConnection();
+        Connection conn = DatabaseConfig.getConnection(DATABASE);
         
         String sql = "SELECT short_code FROM urls WHERE original_url = ?";
         
@@ -60,7 +62,7 @@ public class UrlRepository {
     }
 
     public boolean existsByShortCode(String shortCode) throws Exception {
-        Connection conn = DatabaseConfig.getConnection();
+        Connection conn = DatabaseConfig.getConnection(DATABASE);
 
         String sql = "SELECT * FROM urls WHERE short_code = ? LIMIT 1";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -75,7 +77,7 @@ public class UrlRepository {
     }
 
     public boolean existsByOriginalUrl(String originalUrl) throws Exception {
-        Connection conn = DatabaseConfig.getConnection();
+        Connection conn = DatabaseConfig.getConnection(DATABASE);
 
         String sql = "SELECT * FROM urls WHERE original_url = ? LIMIT 1";
         PreparedStatement stmt = conn.prepareStatement(sql);
