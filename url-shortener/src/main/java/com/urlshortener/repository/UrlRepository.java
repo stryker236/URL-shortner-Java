@@ -7,29 +7,33 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class UrlRepository {
 
-    private static final String DATABASE = "urlshortener";
+public class UrlRepository {
+    private String _DATABASE;
+    private Connection conn;
+    
+    public UrlRepository(String DATABASE) throws Exception {
+        this._DATABASE = DATABASE;
+        this.conn = DatabaseConfig.getConnection(DATABASE);
+    }
 
     public void save(Url url) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(DATABASE);
 
         String sql = "INSERT INTO urls (short_code, original_url) VALUES (?, ?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, url.getShortCode());
-        stmt.setString(2, url.getOriginalUrl());
+        PreparedStatement stmt = this.conn.prepareStatement(sql);
+        stmt.setString(1, url.getCode());
+        stmt.setString(2, url.getUrl());
 
         stmt.executeUpdate();
-        conn.close();
     }
 
     public Url findByShortCode(String shortCode) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(DATABASE);
-        
+        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
+
         String sql = "SELECT original_url FROM urls WHERE short_code = ?";
-        
-        PreparedStatement stmt = conn.prepareStatement(sql); 
-        stmt.setString(1, shortCode); 
+
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, shortCode);
         ResultSet rs = stmt.executeQuery();
 
         if (rs.next()) {
@@ -43,10 +47,10 @@ public class UrlRepository {
     }
 
     public Url findByOriginalUrl(String originalUrl) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(DATABASE);
-        
+        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
+
         String sql = "SELECT short_code FROM urls WHERE original_url = ?";
-        
+
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, originalUrl);
         ResultSet rs = stmt.executeQuery();
@@ -61,33 +65,53 @@ public class UrlRepository {
         return null;
     }
 
+    public void deleteByShortCode(String shortCode) throws Exception {
+        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
+
+        String sql = "DELETE FROM urls WHERE short_code = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, shortCode);
+
+        stmt.executeUpdate();
+        conn.close();
+    }
+
+    public void deleteByOriginalUrl(String originalUrl) throws Exception {
+        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
+
+        String sql = "DELETE FROM urls WHERE original_url = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, originalUrl);
+
+        stmt.executeUpdate();
+        conn.close();
+    }
+
     public boolean existsByShortCode(String shortCode) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(DATABASE);
+        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
 
         String sql = "SELECT * FROM urls WHERE short_code = ? LIMIT 1";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, shortCode);
-        
+
         ResultSet rs = stmt.executeQuery();
-        
+
         boolean exists = rs.next();
-        
+
         conn.close();
         return exists;
     }
 
     public boolean existsByOriginalUrl(String originalUrl) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(DATABASE);
 
         String sql = "SELECT * FROM urls WHERE original_url = ? LIMIT 1";
-        PreparedStatement stmt = conn.prepareStatement(sql);
+        PreparedStatement stmt = this.conn.prepareStatement(sql);
         stmt.setString(1, originalUrl);
-        
+
         ResultSet rs = stmt.executeQuery();
-        
+
         boolean exists = rs.next();
-        
-        conn.close();
+
         return exists;
     }
 }

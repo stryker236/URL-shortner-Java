@@ -1,6 +1,7 @@
 package com.urlshortener.api;
 
 import com.google.gson.Gson;
+import com.urlshortener.repository.UrlRepository;
 import com.urlshortener.service.UrlService;
 
 import static spark.Spark.*;
@@ -8,10 +9,12 @@ import static spark.Spark.*;
 import java.net.URI;
 
 public class UrlController {
+    private static String DATABASE = "urlshortener";
+    
+    public static void register() throws Exception {
+        UrlRepository repo = new UrlRepository(DATABASE);
+        UrlService service = new UrlService(repo);
 
-    public static void register() {
-
-        UrlService service = new UrlService();
         Gson gson = new Gson();
 
         // Create short URL through params
@@ -39,7 +42,7 @@ public class UrlController {
             }
             res.status(201);
             res.type("application/json");
-            return "http://localhost:4567/r/" + code;
+            return "http://localhost:4567/" + code + "/redirect";
         });
 
         // Get original URL info
@@ -60,13 +63,13 @@ public class UrlController {
         get("/urls/:code/redirect", (req, res) -> {
             String code = req.params(":code");
             String original = service.getOriginalUrl(code);
-
+            System.out.println("Redirecting code: " + code + " to original: " + original);
             if (original == null) {
                 res.status(404);
                 return "Not found";
             }
 
-            res.redirect(original);
+            res.redirect("http://" + original);
             return null;
         });
 

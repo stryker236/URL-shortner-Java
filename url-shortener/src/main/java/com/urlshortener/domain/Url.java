@@ -10,11 +10,11 @@ public class Url {
         this.originalUrl = originalUrl;
     }
 
-    public String getShortCode() {
+    public String getCode() {
         return shortCode;
     }
 
-    public String getOriginalUrl() {
+    public String getUrl() {
         return originalUrl;
     }
 }

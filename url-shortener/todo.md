@@ -1,14 +1,16 @@
 # URL Shortener – TODO
 
 # Extras 
-- [ ] Improve the database conection management
+- [x] Improve the database conection management
+    - [x] Database for testing
 - [x] Improve the verification of orignal url existance in the database
 - [ ] Understand better indexing
 - [ ] Test all the layers
     - [ ] Load testing with JMeter or similar
     - [ ] Understand Mocking and stubbing
     - [ ] Repository
-        - [ ] Test with JUnit and H2 in-memory database
+        - [ ] Test with JUnit and Mockito
+            - [ ] Need to change service implementation to 
     - [ ] Service
         - [ ] Test with JUnit and Mockito
     - [ ] API
