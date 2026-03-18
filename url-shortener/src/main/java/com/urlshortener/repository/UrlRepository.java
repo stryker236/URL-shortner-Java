@@ -12,9 +12,8 @@ public class UrlRepository {
     private String _DATABASE;
     private Connection conn;
     
-    public UrlRepository(String DATABASE) throws Exception {
-        this._DATABASE = DATABASE;
-        this.conn = DatabaseConfig.getConnection(DATABASE);
+    public UrlRepository(Connection conn) throws Exception {
+        this.conn = conn;
     }
 
     public void save(Url url) throws Exception {

@@ -1,18 +1,20 @@
 package com.urlshortener.api;
 
 import com.google.gson.Gson;
+import com.urlshortener.config.DatabaseConfig;
 import com.urlshortener.repository.UrlRepository;
 import com.urlshortener.service.UrlService;
 
 import static spark.Spark.*;
 
 import java.net.URI;
-
+import java.sql.Connection;
 public class UrlController {
     private static String DATABASE = "urlshortener";
     
     public static void register() throws Exception {
-        UrlRepository repo = new UrlRepository(DATABASE);
+        Connection conn = DatabaseConfig.getConnection(DATABASE); // Just to check if the connection works
+        UrlRepository repo = new UrlRepository(conn);
         UrlService service = new UrlService(repo);
 
         Gson gson = new Gson();

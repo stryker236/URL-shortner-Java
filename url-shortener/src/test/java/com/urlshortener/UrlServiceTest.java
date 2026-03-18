@@ -53,4 +53,14 @@ class UrlServiceTest {
         String result = service.getOriginalUrl("abc123");
         assertNull(result);
     }
+
+    @Test
+    void shouldHandleInvalidUrl() throws Exception {
+        UrlRepository repo = mock(UrlRepository.class);
+        when(repo.existsByOriginalUrl("invalid-url")).thenReturn(false);
+        UrlService service = new UrlService(repo);
+        String code = service.createShortUrl("invalid-url");
+        assertNotNull(code);
+        verify(repo).save(any(Url.class));
+    }
 }
