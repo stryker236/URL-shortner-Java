@@ -58,11 +58,11 @@
 - [x] Test redirect behavior in browser
 
 ## Phase 6 – Basic Testing
-- [ ] Test full flow (create → redirect)
-- [ ] Verify records stored in database
-- [ ] Simulate multiple requests
-- [ ] Run small load test (~1k requests)
-- [ ] Measure latency
+- [x] Test full flow (create → redirect)
+- [x] Verify records stored in database
+- [x] Simulate multiple requests
+- [x] Run small load test (~1k requests)
+- [x] Measure latency
 
 ## Phase 7 – Reliability
 - [x] Validate input URLs

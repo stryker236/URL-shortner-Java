@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 
 
 public class UrlRepository {
-    private String _DATABASE;
     private Connection conn;
     
     public UrlRepository(Connection conn) throws Exception {

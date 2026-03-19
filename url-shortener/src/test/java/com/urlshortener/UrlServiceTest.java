@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.urlshortener.domain.Url;
 import com.urlshortener.repository.UrlRepository;
+import com.urlshortener.repository.RedisRepository;
 import com.urlshortener.service.UrlService;
 
 // NOTE: This testing is for the services, not actually making calls to the database
@@ -19,18 +20,24 @@ class UrlServiceTest {
     @Test
     void shouldCreateShortUrl() throws Exception {
         UrlRepository repo = mock(UrlRepository.class);
+        RedisRepository redis = mock(RedisRepository.class);
         when(repo.existsByOriginalUrl("https://google.com")).thenReturn(false);
-        UrlService service = new UrlService(repo);
+        when(repo.findByOriginalUrl("https://google.com")).thenReturn(null);
+        when(redis.get("https://google.com")).thenReturn(null);
+        UrlService service = new UrlService(repo, redis);
         String code = service.createShortUrl("https://google.com");
         assertNotNull(code);
         verify(repo).save(any(Url.class));
+        verify(redis).save("https://google.com", code);
     }
 
     @Test
     void shouldReturnNullIfUrlExists() throws Exception {
         UrlRepository repo = mock(UrlRepository.class);
+        RedisRepository redis = mock(RedisRepository.class);
         when(repo.existsByOriginalUrl("https://google.com")).thenReturn(true);
-        UrlService service = new UrlService(repo);
+        when(redis.get("https://google.com")).thenReturn("existing_code");
+        UrlService service = new UrlService(repo, redis);
         String result = service.createShortUrl("https://google.com");
         assertNull(result);
     }
@@ -38,9 +45,10 @@ class UrlServiceTest {
     @Test
     void shouldReturnOriginalUrl() throws Exception {
         UrlRepository repo = mock(UrlRepository.class);
+        RedisRepository redis = mock(RedisRepository.class);
         Url url = new Url("abc123", "https://google.com");
         when(repo.findByShortCode("abc123")).thenReturn(url);
-        UrlService service = new UrlService(repo);
+        UrlService service = new UrlService(repo, redis);
         String result = service.getOriginalUrl("abc123");
         assertEquals("https://google.com", result);
     }
@@ -48,8 +56,9 @@ class UrlServiceTest {
     @Test
     void shouldReturnNullIfCodeNotFound() throws Exception {
         UrlRepository repo = mock(UrlRepository.class);
+        RedisRepository redis = mock(RedisRepository.class);
         when(repo.findByShortCode("abc123")).thenReturn(null);
-        UrlService service = new UrlService(repo);
+        UrlService service = new UrlService(repo, redis);
         String result = service.getOriginalUrl("abc123");
         assertNull(result);
     }
@@ -57,8 +66,9 @@ class UrlServiceTest {
     @Test
     void shouldHandleInvalidUrl() throws Exception {
         UrlRepository repo = mock(UrlRepository.class);
+        RedisRepository redis = mock(RedisRepository.class);
         when(repo.existsByOriginalUrl("invalid-url")).thenReturn(false);
-        UrlService service = new UrlService(repo);
+        UrlService service = new UrlService(repo, redis);
         String code = service.createShortUrl("invalid-url");
         assertNotNull(code);
         verify(repo).save(any(Url.class));
