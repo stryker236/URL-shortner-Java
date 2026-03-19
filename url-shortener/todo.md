@@ -55,7 +55,7 @@
 - [x] GET /urls/:shortCode/redirect endpoint
 - [x] Return correct HTTP status codes
 - [x] Test endpoints with curl
-- [ ] Test redirect behavior in browser
+- [x] Test redirect behavior in browser
 
 ## Phase 6 – Basic Testing
 - [ ] Test full flow (create → redirect)
@@ -65,10 +65,10 @@
 - [ ] Measure latency
 
 ## Phase 7 – Reliability
-- [ ] Validate input URLs
+- [x] Validate input URLs
 - [ ] Return JSON responses
-- [ ] Handle duplicate short codes
-- [ ] Add error handling
+- [x] Handle duplicate short codes
+- [x] Add error handling
 - [ ] Handle database connection failures
 - [ ] Add defensive checks
 

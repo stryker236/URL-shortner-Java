@@ -27,7 +27,7 @@ public class UrlRepository {
     }
 
     public Url findByShortCode(String shortCode) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
+        Connection conn = this.conn;
 
         String sql = "SELECT original_url FROM urls WHERE short_code = ?";
 
@@ -37,16 +37,14 @@ public class UrlRepository {
 
         if (rs.next()) {
             String original = rs.getString("original_url");
-            conn.close();
             return new Url(shortCode, original);
         }
 
-        conn.close();
         return null;
     }
 
     public Url findByOriginalUrl(String originalUrl) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
+        Connection conn = this.conn;
 
         String sql = "SELECT short_code FROM urls WHERE original_url = ?";
 
@@ -56,38 +54,34 @@ public class UrlRepository {
 
         if (rs.next()) {
             String code = rs.getString("short_code");
-            conn.close();
             return new Url(code, originalUrl);
         }
 
-        conn.close();
         return null;
     }
 
     public void deleteByShortCode(String shortCode) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
+        Connection conn = this.conn;
 
         String sql = "DELETE FROM urls WHERE short_code = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, shortCode);
 
         stmt.executeUpdate();
-        conn.close();
     }
 
     public void deleteByOriginalUrl(String originalUrl) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
+        Connection conn = this.conn;
 
         String sql = "DELETE FROM urls WHERE original_url = ?";
         PreparedStatement stmt = conn.prepareStatement(sql);
         stmt.setString(1, originalUrl);
 
         stmt.executeUpdate();
-        conn.close();
     }
 
     public boolean existsByShortCode(String shortCode) throws Exception {
-        Connection conn = DatabaseConfig.getConnection(this._DATABASE);
+        Connection conn = this.conn;
 
         String sql = "SELECT * FROM urls WHERE short_code = ? LIMIT 1";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -97,7 +91,6 @@ public class UrlRepository {
 
         boolean exists = rs.next();
 
-        conn.close();
         return exists;
     }
 

@@ -1,4 +1,4 @@
--- Active: 1773105009396@@host.docker.internal@5432@urlshortener_test
+-- Active: 1773105009396@@host.docker.internal@5432@urlshortener
 CREATE DATABASE urlshortener_test;
 CREATE TABLE urls (
     id BIGSERIAL PRIMARY KEY,
