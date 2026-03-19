@@ -6,13 +6,11 @@
 - [x] Improve the verification of orignal url existance in the database
 - [ ] Understand better indexing
 - [ ] Test all the layers
-    - [ ] Load testing with JMeter or similar
     - [ ] Understand Mocking and stubbing
     - [ ] Repository
-        - [ ] Test with JUnit and Mockito
-            - [ ] Need to change service implementation to 
-    - [ ] Service
-        - [ ] Test with JUnit and Mockito
+        - Test with k6 or jMeter or wrk
+    - [x] Service
+        - [x] Test with JUnit and Mockito
     - [ ] API
         - [ ] Test with RestAssured or similar
 
@@ -45,16 +43,18 @@
 - [x] Implement UrlService
 - [x] createShortUrl(originalUrl)
 - [x] getOriginalUrl(shortCode)
-- [ ] Handle duplicate short codes with retry
-- [ ] Validate URL format
-- [ ] Write basic unit tests for service logic
+- [x] Handle duplicate short codes with retry
+- [x] Validate URL format
+    - [ ] Create a validator for URL format 
+- [x] Write basic unit tests for service logic
 
 ## Phase 5 – API Layer
-- [ ] Setup SparkJava server
-- [ ] POST /urls endpoint
-- [ ] GET /:shortCode redirect endpoint
-- [ ] Return correct HTTP status codes
-- [ ] Test endpoints with curl
+- [x] Setup SparkJava server
+- [x] POST /urls endpoint
+- [x] GET /urls/:shortCode redirect endpoint
+- [x] GET /urls/:shortCode/redirect endpoint
+- [x] Return correct HTTP status codes
+- [x] Test endpoints with curl
 - [ ] Test redirect behavior in browser
 
 ## Phase 6 – Basic Testing

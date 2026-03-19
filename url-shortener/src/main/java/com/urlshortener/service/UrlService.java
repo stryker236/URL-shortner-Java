@@ -17,6 +17,10 @@ public class UrlService {
             return null;
 
         String code = ShortCodeGenerator.generate();
+        while (urlRepository.existsByShortCode(code)) {
+            // In the unlikely event of a collision, generate a new code
+            code = ShortCodeGenerator.generate();
+        }
         Url url = new Url(code, originalUrl);
         urlRepository.save(url);
         return code;
