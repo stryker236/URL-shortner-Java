@@ -7,7 +7,6 @@ import com.urlshortener.repository.UrlRepository;
 import com.urlshortener.service.UrlService;
 
 import static spark.Spark.*;
-
 import java.net.URI;
 import java.sql.Connection;
 
@@ -22,10 +21,30 @@ public class UrlController {
 
         UrlRepository repo = new UrlRepository(conn);
         RedisRepository redis = new RedisRepository(conn2);
-        
+
         UrlService service = new UrlService(repo, redis);
 
         Gson gson = new Gson();
+
+        before((req, res) -> {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Methods", "*");
+            res.header("Access-Control-Allow-Headers", "*");
+        });
+
+        options("/*", (request, response) -> {
+            String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+            if (accessControlRequestHeaders != null) {
+                response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+            }
+
+            String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+            if (accessControlRequestMethod != null) {
+                response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+            }
+
+            return "OK";
+        });
 
         // Create short URL through params
         post("/urls", (req, res) -> {
@@ -52,7 +71,7 @@ public class UrlController {
             }
             res.status(201);
             res.type("application/json");
-            return "http://localhost:4567/" + code + "/redirect";
+            return gson.toJson("http://localhost:4567/urls/" + code + "/redirect");
         });
 
         // Get original URL info
@@ -66,17 +85,21 @@ public class UrlController {
             }
 
             res.type("application/json");
-            return original;
+            return gson.toJson(original);
         });
 
         // Redirect to original URL
         get("/urls/:code/redirect", (req, res) -> {
             String code = req.params(":code");
             String original = service.getOriginalUrl(code);
+            if (original != null) {
+                res.redirect("http://" + original);
+            }
+
             System.out.println("Redirecting code: " + code + " to original: " + original);
             if (original == null) {
                 res.status(404);
-                return "Not found";
+                return gson.toJson("Not found");
             }
 
             res.redirect("http://" + original);
@@ -111,7 +134,7 @@ public class UrlController {
             service.deleteByOriginalUrl(originalUrl);
             res.status(204);
             res.type("application/json");
-            return "Deleted short URL with original URL: " + originalUrl;
+            return gson.toJson("Deleted short URL with original URL: " + originalUrl);
         });
     }
 }
